@@ -1,4 +1,3 @@
-import requests
 import pprint
 from routes import get_top10_countries, get_country_by_name
 

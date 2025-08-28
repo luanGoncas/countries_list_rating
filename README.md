@@ -4,13 +4,13 @@ O objetivo é construir uma pequena API em Python que consuma a API pública RES
 
 ## Objetivos Específicos
 
-### Consumo da API REST Countries de forma correta [ ]
+### Consumo da API REST Countries de forma correta [X]
 
-### Manipulação apropriada de JSON, selecionando os campos necessários [ ]
+### Manipulação apropriada de JSON, selecionando os campos necessários [X]
 
 ### Criação dos endpoints necessários [ ]
-- [ ] Listagem de países
-- [ ] Busca de países
+- [X] Listagem de países
+- [X] Busca de países
 - [ ] Avaliação de países
 
 ### Persistência em banco de dados [ ]

@@ -37,5 +37,3 @@ def get_country_by_name(endpoint, country):
             raise Exception('Invalid API call! Please check the resource requested.')
     except Exception as e:
         return str(e)
-
-# pprint.pprint(get_top10_countries('/paises/top10'))
