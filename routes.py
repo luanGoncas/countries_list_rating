@@ -13,8 +13,6 @@ def get_top10_countries(endpoint):
             
             if data.status_code != 200:
                 raise Exception(data.text)
-                # payload = {'message': 'Invalid API call! Please check the resource requested.', 'status_code': 400}
-                # raise Exception(payload)
             else:
             
                 response = data.json()
@@ -37,7 +35,9 @@ def get_top10_countries(endpoint):
                         country_dislikes = country_result[3]
                         top_country.update({'Likes': country_likes, 'Dislikes': country_dislikes})
                 
-                return top_ten_countries
+                payload = {'message': top_ten_countries, 'status_code': 200}
+
+                return payload
 
         else:
             raise Exception('{"message": "Invalid API call! Please check the resource requested.", "status": 400}')
@@ -45,7 +45,6 @@ def get_top10_countries(endpoint):
         message = json.loads(str(e))
         payload = {'message': message['message'], 'status_code': message['status']}
         return payload
-        # return str(e)
 
 def get_country_by_name(endpoint, country):
     try:
@@ -57,14 +56,19 @@ def get_country_by_name(endpoint, country):
                 raise Exception(data.text)
             
             response = data.json()
-            found_country = get_country(country)
+            found_country = get_country(response[0]['name']['common'])
 
             if found_country == None:
                 insert_country_rate(found_country['Country'], '')
-            else:
                 response.append({'Likes': 0, 'Dislikes': 0})
+            else:
+                likes = found_country[2]
+                dislikes = found_country[3]
+                response.append({'Likes': likes, 'Dislikes': dislikes})
 
-            return response
+            payload = {'message': response, 'status_code': 200}
+
+            return payload
         else:
             raise Exception('{"message": "Invalid API call! Please check the resource requested.", "status": 400}')
     except Exception as e:
@@ -72,10 +76,22 @@ def get_country_by_name(endpoint, country):
         payload = {'message': message['message'], 'status_code': message['status']}
         return payload
 
-# def post_country_rating(endpoint, country, vote):
-#     try:
-#         if endpoint == f'/paises/avaliar':
+def post_country_rating(endpoint, country, vote):
+    try:
+        if endpoint == f'/paises/avaliar':
 
-#             data = get_country_by_name('/paises/buscar?nome=', country)
+            data = get_country_by_name('/paises/buscar?nome=', country)
 
-#             if data == ''
+            if data['status_code'] != 200:
+                raise Exception('{"message": "Invalid API call! Please check the resource requested.", "status": 400}')
+            else:
+                country_rated = data['message'][0]['name']['common']
+                insert_country_rate(country_rated, vote)
+                output = get_country_by_name('/paises/buscar?nome=', country)
+
+                payload = {'message': output['message'], 'status_code': 200}
+                return payload
+    except Exception as e:
+        message = json.loads(str(e))
+        payload = {'message': message['message'], 'status_code': message['status']}
+        return payload
